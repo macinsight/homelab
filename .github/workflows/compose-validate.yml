@@ -1,0 +1,40 @@
+name: Validate Compose stacks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Render Compose configurations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate Compose files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          while IFS= read -r -d '' compose_file; do
+            stack_dir="$(dirname "$compose_file")"
+
+            # These files are intentionally ignored and only let Compose parse
+            # stacks that reference local runtime configuration.
+            touch "$stack_dir/.env" "$stack_dir/compose.env"
+
+            echo "Validating $compose_file"
+            docker compose \
+              --file "$compose_file" \
+              config \
+              --no-interpolate \
+              --quiet
+          done < <(find . -path './.git' -prune -o -name compose.yaml -type f -print0)
