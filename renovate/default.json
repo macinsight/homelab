@@ -1,0 +1,65 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Berlin",
+  "labels": ["renovate"],
+  "reviewers": ["macinsight"],
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 3,
+  "rangeStrategy": "pin",
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "commitBodyTable": true,
+  "minimumReleaseAge": "3 days",
+  "separateMajorMinor": true,
+  "separateMinorPatch": true,
+  "prBodyNotes": [
+    "Homelab note: review upstream release notes and the recovery plan before merging."
+  ],
+  "packageRules": [
+    {
+      "description": "Automerge patch and minor dependency updates",
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "addLabels": ["automerge"]
+    },
+    {
+      "description": "Label Docker image updates",
+      "matchDatasources": ["docker"],
+      "addLabels": ["docker"]
+    },
+    {
+      "description": "Label minor Docker image updates",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor"],
+      "addLabels": ["minor"]
+    },
+    {
+      "description": "Label patch Docker image updates",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "addLabels": ["patch"]
+    },
+    {
+      "description": "Label GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "addLabels": ["github-actions"]
+    },
+    {
+      "description": "Include changelogs in minor and major update pull requests",
+      "matchUpdateTypes": ["minor", "major"],
+      "fetchChangeLogs": "pr"
+    },
+    {
+      "description": "Require macinsight review and Dependency Dashboard approval for major dependency updates",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "automerge": false,
+      "reviewers": ["macinsight"],
+      "addLabels": ["major"]
+    }
+  ]
+}
