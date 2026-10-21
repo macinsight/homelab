@@ -11,7 +11,7 @@
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
   "commitBodyTable": true,
-  "minimumReleaseAge": "3 days",
+  "automergeSchedule": ["0 5 * * *"],
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "prBodyNotes": [
